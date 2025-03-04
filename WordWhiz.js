@@ -3,37 +3,44 @@ const letters = document.querySelectorAll(".game-letter");
 const loadingDiv = document.querySelector("info-bar");
 const answerLength = 5;
 
-// function getRandomInt(min, max) {
-//   return Math.floor(Math.random() * (max - min + 1)) + min;
-// }
-// let randomNumber = getRandomInt(1, 100);
-
-// const randomWordUrl = `https://words.dev-apis.com/word-of-the-day?random=${randomNumber}`;
+const randomWordUrl = `https://words.dev-apis.com/word-of-the-day?random=1`;
 // console.log(randomWordUrl);
 
 const play = async () => {
   let currentGuess = "";
   const currentRow = 0;
 
+  const res = await fetch(randomWordUrl);
+  const resObj = await res.json();
+  const word = resObj.word.toUpperCase();
+  setLoading();
+  console.log(word);
+  console.log(randomWordUrl);
+
   const addLetter = (letter) => {
     if (currentGuess.length < answerLength) {
       currentGuess += letter;
     } else {
-      currentGuess =
-        currentGuess.substring(0, currentGuess.length - 1) + letter;
+      current = currentGuess.substring(0, currentGuess.length - 1) + letter;
     }
-    letters[answerLength * currentGuess + currentGuess.length - 1].innerText =
+
+    letters[currentRow * answerLength + currentGuess.length - 1].innerText =
       letter;
   };
-
   const commit = async () => {
     if (currentGuess.length !== answerLength) {
-      //do nothing
+      // do nothing
       return;
     }
+
     currentRow++;
     currentGuess = "";
   };
+
+  function backspace() {
+    currentGuess = currentGuess.substring(0, currentGuess.length - 1);
+    letters[answerLength * currentRow + currentGuess.length].innerText = "";
+  }
   document.addEventListener("keydown", function handleKeyDown(event) {
     const action = event.key;
     console.log(action);
@@ -52,6 +59,10 @@ const play = async () => {
 const isLetter = (letter) => {
   return /^[a-zA-Z]$/.test(letter);
 };
+
+function setLoading(isLoading) {
+  loadingDivDiv.classList.toggle("show", isLoading);
+}
 
 play();
 
