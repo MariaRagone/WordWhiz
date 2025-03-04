@@ -22,7 +22,7 @@
     font-size: 30px;
   }
   
-  .scoreboard {
+  .game {
     max-width: 295px;
     width: 100%;
     margin: 10px auto;
@@ -32,7 +32,7 @@
     column-gap: 5px;
   }
   
-  .scoreboard-letter {
+  .game-letter {
     height: 45px;
     width: 45px;
     font-size: 30px;
@@ -45,7 +45,7 @@
   }
   
   .correct {
-    background-color: darkgreen;
+    background-color: rgb(0, 130, 0);
     color: white;
   }
   

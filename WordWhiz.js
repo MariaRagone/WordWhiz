@@ -1,20 +1,59 @@
-//promise chaining
+// const wordUrl = "https://words.dev-apis.com/word-of-the-day";
+const letters = document.querySelectorAll(".game-letter");
+const loadingDiv = document.querySelector("info-bar");
+const answerLength = 5;
 
-const wordUrl = "https://words.dev-apis.com/word-of-the-day";
+// function getRandomInt(min, max) {
+//   return Math.floor(Math.random() * (max - min + 1)) + min;
+// }
+// let randomNumber = getRandomInt(1, 100);
 
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-let randomNumber = getRandomInt(1, 100);
+// const randomWordUrl = `https://words.dev-apis.com/word-of-the-day?random=${randomNumber}`;
+// console.log(randomWordUrl);
 
-const randomWordUrl = `https://words.dev-apis.com/word-of-the-day?random=${randomNumber}`;
-console.log(randomWordUrl);
+const play = async () => {
+  let currentGuess = "";
+  const currentRow = 0;
 
-const res = await fetch(randomWordUrl);
-const { word: wordRes } = await res.json();
-const word = wordRes.toUpperCase();
-const wordParts = word.split("");
-console.log(word);
+  const addLetter = (letter) => {
+    if (currentGuess.length < answerLength) {
+      currentGuess += letter;
+    } else {
+      currentGuess =
+        currentGuess.substring(0, currentGuess.length - 1) + letter;
+    }
+    letters[answerLength * currentGuess + currentGuess.length - 1].innerText =
+      letter;
+  };
+
+  const commit = async () => {
+    if (currentGuess.length !== answerLength) {
+      //do nothing
+      return;
+    }
+    currentRow++;
+    currentGuess = "";
+  };
+  document.addEventListener("keydown", function handleKeyDown(event) {
+    const action = event.key;
+    console.log(action);
+    if (action === "Enter") {
+      commit();
+    } else if (action === "Backspace") {
+      backspace();
+    } else if (isLetter(action)) {
+      addLetter(action.toUpperCase());
+    } else {
+      //do nothing
+    }
+  });
+};
+
+const isLetter = (letter) => {
+  return /^[a-zA-Z]$/.test(letter);
+};
+
+play();
 
 // const words = document.getElementById("word-target");
 
@@ -36,10 +75,6 @@ console.log(word);
 // const processedResult = await promise.json()
 
 //   }
-
-const isLetter = (letter) => {
-  return /^[a-zA-Z]$/.test(letter);
-};
 
 document
   .querySelector(".tester-input")
