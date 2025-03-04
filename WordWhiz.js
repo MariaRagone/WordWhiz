@@ -1,6 +1,6 @@
 // const wordUrl = "https://words.dev-apis.com/word-of-the-day";
 const letters = document.querySelectorAll(".game-letter");
-const loadingDiv = document.querySelector("info-bar");
+const loadingDiv = document.querySelector(".info-bar");
 const answerLength = 5;
 
 const randomWordUrl = `https://words.dev-apis.com/word-of-the-day?random=1`;
@@ -13,7 +13,9 @@ const play = async () => {
   const res = await fetch(randomWordUrl);
   const resObj = await res.json();
   const word = resObj.word.toUpperCase();
-  setLoading();
+  const wordParts = word.split("");
+  setLoading(false);
+
   console.log(word);
   console.log(randomWordUrl);
 
@@ -31,6 +33,14 @@ const play = async () => {
     if (currentGuess.length !== answerLength) {
       // do nothing
       return;
+    }
+
+    const guessParts = currentGuess.split("");
+    for (let i = 0; i < answerLength; i++) {
+      //mark as correct
+      if (guessParts[i] === wordParts[i]) {
+        letters[currentRow * answerLength + i].classList.add("correct");
+      }
     }
 
     currentRow++;
@@ -61,31 +71,10 @@ const isLetter = (letter) => {
 };
 
 function setLoading(isLoading) {
-  loadingDivDiv.classList.toggle("show", isLoading);
+  loadingDiv.classList.toggle("show", isLoading);
 }
 
 play();
-
-// const words = document.getElementById("word-target");
-
-// const getWord = async () => {
-//   const promise = await fetch(randomWordUrl);
-//   const processedResult = await promise.json();
-//   const word = document.createElement("word");
-//   word = processedResult.word;
-//   console.log(word);
-//   words.appendChild(word);
-// };
-
-// document.getElementById("get-word-btn").addEventListener("click", getWord);
-
-// const validateWord = async () => {
-//   const promise = await fetch(validateUrl, {
-//     method: 'POST',
-//     body: JSON.stringify({"word": "intent"})}
-// const processedResult = await promise.json()
-
-//   }
 
 document
   .querySelector(".tester-input")
